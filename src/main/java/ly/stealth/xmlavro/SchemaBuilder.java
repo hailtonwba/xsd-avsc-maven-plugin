@@ -23,6 +23,7 @@ import java.util.*;
 public class SchemaBuilder {
     private boolean debug;
     private Resolver resolver;
+    private String namespace;
 
     private static Map<Short, Schema.Type> primitives = new HashMap<>();
     static {
@@ -59,6 +60,8 @@ public class SchemaBuilder {
     public Resolver getResolver() { return resolver; }
     public void setResolver(Resolver resolver) { this.resolver = resolver; }
 
+    public String getNamespace() { return namespace; }
+    public void setNamespace(String namespace) { this.namespace = namespace; }
 
     public Schema createSchema(String xsd) {
         return createSchema(new StringReader(xsd));
@@ -134,7 +137,7 @@ public class SchemaBuilder {
             fields.add(field);
         }
 
-        Schema schema = Schema.createRecord(nextTypeName(), "", "", false);
+        Schema schema = Schema.createRecord(nextTypeName(), "", namespace, false);
         schema.setFields(fields);
         schema.addProp(Source.SOURCE, Source.DOCUMENT);
         return schema;
@@ -190,7 +193,7 @@ public class SchemaBuilder {
     }
 
     private Schema createGroupSchema(String name, XSModelGroup groupTerm) {
-      Schema record = Schema.createRecord(name, null, null, false);
+      Schema record = Schema.createRecord(name, null, namespace, false);
       schemas.put(name, record);
 
       Map<String, Schema.Field> fields = new HashMap<>();
@@ -201,7 +204,7 @@ public class SchemaBuilder {
     }
 
     private Schema createRecordSchema(String name, XSComplexTypeDefinition type) {
-        Schema record = Schema.createRecord(name, null, null, false);
+        Schema record = Schema.createRecord(name, null, namespace, false);
         schemas.put(name, record);
 
         record.setFields(createFields(type));
