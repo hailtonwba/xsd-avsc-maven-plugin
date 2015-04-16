@@ -1,0 +1,58 @@
+= XML Schema to Avro Schema Maven Plugin
+
+This project is forked from https://github.com/stealthly/xml-avro
+to implement a Maven plugin.
+
+
+== Configure Your Maven Project To Use Plugin
+
+[source,xml]
+--
+<build>
+  <plugins>
+    <!-- ... -->
+
+    <plugin>
+      <groupId>com.github.pukkaone</groupId>
+      <artifactId>xsd-avsc-maven-plugin</artifactId>
+      <version>1.0.0</version>
+      <configuration>
+        <sourceDirectory>${project.basedir}/src/main/xsd</sourceDirectory>
+        <includes>
+          <include>fhir-all.xsd</include>
+        </includes>
+        <outputDirectory>${project.build.directory}/generated-sources/avsc</outputDirectory>
+        <namespace>com.example.fhir.avro</namespace>
+      </configuration>
+      <executions>
+        <execution>
+          <phase>generate-sources</phase>
+          <goals>
+            <goal>schema</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+
+    <!-- ... -->
+  </plugins>
+</build>
+--
+
+
+=== Parameters
+
+`sourceDirectory`::
+    Directory containing XML schema files. The default is
+    ${project.basedir}`/src/main/xsd`
+
+`includes`::
+    Ant-style patterns used to select XML schema file names from the source
+    directory for conversion. The default pattern is `**/*.xsd`
+
+`outputDirectory`::
+    Directory where Avro schema files will be written. The default is
+    ${project.build.directory}`/generated-sources/avsc`
+
+`namespace`::
+    Namespace for generated Avro named types.
