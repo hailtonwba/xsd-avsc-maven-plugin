@@ -315,11 +315,28 @@ public class SchemaBuilder {
     }
 
     String complexTypeName(XSTypeDefinition type) {
-        String name = validName(((XSComplexTypeDecl) type).getTypeName());
-        return name != null ? name : nextTypeName();
+        String name = normalizeName(((XSComplexTypeDecl) type).getTypeName());
+        if (name == null) {
+            return nextTypeName();
+        }
+
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     String validName(String name) {
+        String s = normalizeName(name);
+        if (s == null) return null;
+
+        // handle built-in types
+        try {
+            Schema.Type.valueOf(s.toUpperCase());
+            s += typeName++;
+        } catch (IllegalArgumentException ignore) {}
+
+        return s;
+    }
+
+    private String normalizeName(String name) {
         if (name == null) return null;
 
         char[] chars = name.toCharArray();
@@ -344,15 +361,7 @@ public class SchemaBuilder {
             }
         }
 
-        String s = new String(result, 0, p);
-
-        // handle built-in types
-        try {
-            Schema.Type.valueOf(s.toUpperCase());
-            s += typeName++;
-        } catch (IllegalArgumentException ignore) {}
-
-        return s;
+        return new String(result, 0, p);
     }
 
     private int typeName;
