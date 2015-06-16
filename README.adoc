@@ -7,7 +7,7 @@ to implement a Maven plugin.
 == Configure Your Maven Project To Use Plugin
 
 [source,xml]
---
+----
 <build>
   <plugins>
     <!-- ... -->
@@ -19,10 +19,10 @@ to implement a Maven plugin.
       <configuration>
         <sourceDirectory>${project.basedir}/src/main/xsd</sourceDirectory>
         <includes>
-          <include>fhir-all.xsd</include>
+          <include>fhir-single.xsd</include>
         </includes>
         <outputDirectory>${project.build.directory}/generated-sources/avsc</outputDirectory>
-        <namespace>com.example.fhir.avro</namespace>
+        <namespace>com.example.fhir.model</namespace>
       </configuration>
       <executions>
         <execution>
@@ -37,14 +37,14 @@ to implement a Maven plugin.
     <!-- ... -->
   </plugins>
 </build>
---
+----
 
 
 === Parameters
 
 `sourceDirectory`::
     Directory containing XML schema files. The default is
-    ${project.basedir}`/src/main/xsd`
+    `${project.basedir}/src/main/xsd`
 
 `includes`::
     Ant-style patterns used to select XML schema file names from the source
@@ -52,7 +52,7 @@ to implement a Maven plugin.
 
 `outputDirectory`::
     Directory where Avro schema files will be written. The default is
-    ${project.build.directory}`/generated-sources/avsc`
+    `${project.build.directory}/generated-sources/avsc`
 
 `namespace`::
     Namespace for generated Avro named types.
